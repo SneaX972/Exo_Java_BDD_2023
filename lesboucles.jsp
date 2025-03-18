@@ -27,6 +27,24 @@
 
 <h2>Exercice 1 : Le carré d'étoiles</h2>
 <p>Ecrire le code afin de produire un carré d'étoile</p>
+public class CarreEtoiles {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Veuillez fournir une taille en argument.");
+            return;
+        }
+        
+        int n = Integer.parseInt(args[0]); // Taille du carré passée en argument
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }
+}
+
 <p>Exemple si l'utilisateur saisie le valeur 5</p>
 <p>*****</br>*****</br>*****</br>*****</br>*****</p>
 
