@@ -1,79 +1,52 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.*" %>
 <%@ include file="task.jspf" %>
 
 <%
-    // Récupération ou création de la liste des tâches en session
-    List<Task> tasks = (List<Task>) session.getAttribute("tasks");
-    if (tasks == null) {
-        tasks = new ArrayList<>();
+    // Récupération des tâches stockées dans la session
+    List tasksRaw = (List) session.getAttribute("tasks");
+    List<Task> tasks = new ArrayList<>();
+
+    try {
+        if (tasksRaw != null) {
+            for (Object o : tasksRaw) {
+                tasks.add((Task) o);
+            }
+        }
+    } catch (Exception e) {
+        session.invalidate();
+        response.sendRedirect("ajout.jsp");
+        return;
+    }
+
+    // Traitement du formulaire
+    String title = request.getParameter("title");
+    String description = request.getParameter("description");
+    String dueDate = request.getParameter("dueDate");
+
+    if (title != null && !title.isEmpty()) {
+        Task t = new Task(title, description, dueDate);
+        tasks.add(t);
         session.setAttribute("tasks", tasks);
+%>
+        <p style="color: green;">✅ Tâche "<strong><%= title %></strong>" ajoutée avec succès !</p>
+<%
     }
-
-    // Gestion des actions (ajout, suppression, terminer)
-    String action = request.getParameter("action");
-
-    if ("add".equals(action)) {
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String dueDate = request.getParameter("dueDate");
-        if (title != null && description != null && dueDate != null) {
-            tasks.add(new Task(title, description, dueDate));
-        }
-    } else if ("delete".equals(action)) {
-        int index = Integer.parseInt(request.getParameter("index"));
-        if (index >= 0 && index < tasks.size()) {
-            tasks.remove(index);
-        }
-    } else if ("complete".equals(action)) {
-        int index = Integer.parseInt(request.getParameter("index"));
-        if (index >= 0 && index < tasks.size()) {
-            tasks.get(index).setCompleted(true);
-        }
-    }
-
-    session.setAttribute("tasks", tasks); // Mettre à jour la session
 %>
 
-<html>
-<head>
-    <title>Gestionnaire de Tâches</title>
-</head>
-<body>
-    <h1>Liste des Tâches</h1>
+<h2>Ajouter une tâche</h2>
+<form method="post" action="ajout.jsp">
+    <label for="title">Titre :</label>
+    <input type="text" id="title" name="title" required><br><br>
 
-    <!-- Formulaire pour ajouter une tâche -->
-    <form action="tasks.jsp" method="post">
-        <input type="hidden" name="action" value="add">
-        <input type="text" name="title" placeholder="Titre" required>
-        <input type="text" name="description" placeholder="Description" required>
-        <input type="date" name="dueDate" required>
-        <button type="submit">Ajouter</button>
-    </form>
+    <label for="description">Description :</label><br>
+    <textarea id="description" name="description" rows="4" cols="50"></textarea><br><br>
 
-    <ul>
-        <%
-            for (int i = 0; i < tasks.size(); i++) {
-                Task task = tasks.get(i);
-        %>
-                <li>
-                    <strong><%= task.getTitle() %></strong> - <%= task.getDescription() %> - Échéance: <%= task.getDueDate() %>
-                    <% if (!task.isCompleted()) { %>
-                        <form action="tasks.jsp" method="post" style="display:inline;">
-                            <input type="hidden" name="index" value="<%= i %>">
-                            <input type="hidden" name="action" value="complete">
-                            <button type="submit">Terminer</button>
-                        </form>
-                    <% } %>
-                    <form action="tasks.jsp" method="post" style="display:inline;">
-                        <input type="hidden" name="index" value="<%= i %>">
-                        <input type="hidden" name="action" value="delete">
-                        <button type="submit">Supprimer</button>
-                    </form>
-                </li>
-        <% } %>
-    </ul>
+    <label for="dueDate">Date d’échéance :</label>
+    <input type="date" id="dueDate" name="dueDate"><br><br>
+
+    <input type="submit" value="Ajouter">
+</form>
+
     <a href="afficher.jsp">Voir les tâches</a>
    
 
