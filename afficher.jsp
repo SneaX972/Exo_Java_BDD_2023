@@ -1,67 +1,51 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.*" %>
-<%@ include file="task.jsp" %>
+<%@ include file="task.jspf" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des Tâches</title>
+</head>
+<body>
+
+<h1>Mes Tâches</h1>
 
 <%
-    List<Task> tasks = (List<Task>) session.getAttribute("tasks");
-    if (tasks == null) {
-        tasks = new ArrayList<>();
-        session.setAttribute("tasks", tasks);
-    }
+    Object obj = session.getAttribute("taches");
 
-    // Traitement des actions (supprimer ou marquer comme terminée)
-    String action = request.getParameter("action");
-    String indexStr = request.getParameter("index");
-
-    if (action != null && indexStr != null) {
-        try {
-            int index = Integer.parseInt(indexStr);
-            if (index >= 0 && index < tasks.size()) {
-                if ("delete".equals(action)) {
-                    tasks.remove(index);
-                } else if ("done".equals(action)) {
-                    tasks.get(index).setCompleted(true); // ✅ Correction ici
-                }
-            }
-        } catch (NumberFormatException e) {
-            out.println("<p style='color:red;'>Index invalide</p>");
-        }
-    }
-%>
-
-<h2>Liste des tâches</h2>
-
-<%
-    if (tasks.isEmpty()) {
+    if (obj == null || !(obj instanceof List)) {
 %>
     <p>Aucune tâche enregistrée.</p>
 <%
     } else {
-        for (int i = 0; i < tasks.size(); i++) {
-            Task t = tasks.get(i);
+        List taches = (List) obj;
+
+        out.println("<p>Nombre de tâches : " + taches.size() + "</p>");
+
+        for (int i = 0; i < taches.size(); i++) {
+            Object element = taches.get(i);
+            if (element instanceof Task) {
+                Task t = (Task) element;
 %>
-    <div style="border:1px solid #ccc; margin:10px; padding:10px; border-radius:8px;">
-        <strong><%= t.getTitle() %></strong> - 
-        <%= t.isCompleted() ? "✔️ Terminée" : "⏳ En cours" %><br> <!-- ✅ Correction ici -->
-        <em>Description :</em> <%= t.getDescription() %><br>
-        <em>Échéance :</em> <%= t.getDueDate() %><br><br>
+    <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+        <strong>Titre :</strong> <%= t.getTitle() %><br>
+        <strong>Description :</strong> <%= t.getDescription() %><br>
+        <strong>Date d’échéance :</strong> <%= t.getDueDate() %><br>
+        <strong>Statut :</strong> <%= t.isDone() ? "✔ Terminée" : "⏳ En cours" %><br>
 
-        <!-- Formulaire pour marquer comme terminée -->
-        <form action="liste.jsp" method="post" style="display:inline;">
-            <input type="hidden" name="action" value="done">
-            <input type="hidden" name="index" value="<%= i %>">
-            <button type="submit">✅ Marquer comme terminée</button>
-        </form>
-
-        <!-- Formulaire pour supprimer -->
-        <form action="liste.jsp" method="post" style="display:inline;">
-            <input type="hidden" name="action" value="delete">
-            <input type="hidden" name="index" value="<%= i %>">
-            <button type="submit">🗑️ Supprimer</button>
-        </form>
+        <a href="terminer.jsp?index=<%= i %>">✅ Marquer comme terminée</a> |
+        <a href="supprimer.jsp?index=<%= i %>">🗑 Supprimer</a>
     </div>
 <%
+            } else {
+                out.println("<p>⚠ Objet inconnu dans la liste : " + element + "</p>");
+            }
         }
     }
 %>
 
-<p><a href="tasks.jsp">➕ Ajouter une nouvelle tâche</a></p>
+<br>
+<a href="tasks.jsp">➕ Ajouter une tâche</a>
+
+</body>
+</html>
