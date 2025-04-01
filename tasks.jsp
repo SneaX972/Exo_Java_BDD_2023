@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Ajouter une nouvelle tâche</h1>
-    <form action="ajouterTache.jsp" method="post">
+    <form action="ajout.jsp" method="post">
         <label for="title">Titre :</label>
         <input type="text" name="title" id="title" required><br><br>
 
