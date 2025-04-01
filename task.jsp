@@ -3,25 +3,24 @@
         private String title;
         private String description;
         private String dueDate;
-        private boolean isDone;
+        private boolean done;
 
         public Task(String title, String description, String dueDate) {
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
-            this.isDone = false;
+            this.done = false;
         }
 
         public String getTitle() { return title; }
-
         public String getDescription() { return description; }
-
         public String getDueDate() { return dueDate; }
+        public boolean isDone() { return done; }
+        public void setDone(boolean done) { this.done = done; }
 
-        public boolean isDone() { return isDone; }
-
-        public void setDone(boolean done) {
-            this.isDone = done;
+        @Override
+        public String toString() {
+            return "[Task: " + title + "]";
         }
     }
 %>
