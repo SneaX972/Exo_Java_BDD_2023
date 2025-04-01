@@ -1,5 +1,5 @@
 <%@ page import="java.util.*" %>
-<%@ include file="task_class.jsp" %>
+<%@ include file="task.jsp" %>
 
 <%
     List<Task> tasks = (List<Task>) session.getAttribute("tasks");
