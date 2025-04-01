@@ -96,7 +96,7 @@
                 </li>
         <% } %>
     </ul>
-
+    <a href="afficher.jsp">Voir les tâches</a>
     <a href="index.html">Retour à l'accueil</a>
 </body>
 </html>
