@@ -19,7 +19,7 @@
                 if ("delete".equals(action)) {
                     tasks.remove(index);
                 } else if ("done".equals(action)) {
-                    tasks.get(index).setDone(true);
+                    tasks.get(index).setCompleted(true); // ✅ Correction ici
                 }
             }
         } catch (NumberFormatException e) {
@@ -41,11 +41,23 @@
 %>
     <div style="border:1px solid #ccc; margin:10px; padding:10px; border-radius:8px;">
         <strong><%= t.getTitle() %></strong> - 
-        <%= t.isDone() ? "✔️ Terminée" : "⏳ En cours" %><br>
+        <%= t.isCompleted() ? "✔️ Terminée" : "⏳ En cours" %><br> <!-- ✅ Correction ici -->
         <em>Description :</em> <%= t.getDescription() %><br>
         <em>Échéance :</em> <%= t.getDueDate() %><br><br>
-        <a href="liste.jsp?action=done&index=<%= i %>">✅ Marquer comme terminée</a> |
-        <a href="liste.jsp?action=delete&index=<%= i %>">🗑️ Supprimer</a>
+
+        <!-- Formulaire pour marquer comme terminée -->
+        <form action="liste.jsp" method="post" style="display:inline;">
+            <input type="hidden" name="action" value="done">
+            <input type="hidden" name="index" value="<%= i %>">
+            <button type="submit">✅ Marquer comme terminée</button>
+        </form>
+
+        <!-- Formulaire pour supprimer -->
+        <form action="liste.jsp" method="post" style="display:inline;">
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="index" value="<%= i %>">
+            <button type="submit">🗑️ Supprimer</button>
+        </form>
     </div>
 <%
         }
