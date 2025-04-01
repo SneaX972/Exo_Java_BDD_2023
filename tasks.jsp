@@ -34,7 +34,7 @@
 %>
 
 <h2>Ajouter une tâche</h2>
-<form method="post" action="ajout.jsp">
+<form method="post" action="tasks.jsp">
     <label for="title">Titre :</label>
     <input type="text" id="title" name="title" required><br><br>
 
