@@ -97,6 +97,6 @@
         <% } %>
     </ul>
 
-    <a href="index.jsp">Retour à l'accueil</a>
+    <a href="index.html">Retour à l'accueil</a>
 </body>
 </html>
