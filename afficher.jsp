@@ -48,7 +48,7 @@
                         <input type="hidden" name="index" value="<%= i %>">
                         <input type="hidden" name="action" value="delete">
                         <button type="submit">Supprimer</button>
-                    </
+                    </form>
 
 <br>
 <a href="tasks.jsp">➕ Ajouter une tâche</a>
