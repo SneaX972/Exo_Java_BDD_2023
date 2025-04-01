@@ -14,7 +14,7 @@
         }
     } catch (Exception e) {
         session.invalidate();
-        response.sendRedirect("ajout.jsp");
+        response.sendRedirect("tasks.jsp");
         return;
     }
 
